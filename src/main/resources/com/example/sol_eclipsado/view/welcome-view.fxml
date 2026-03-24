@@ -1,14 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
 
-</AnchorPane>
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sol_eclipsado.controller.WelcomeController">
+   <children>
+      <Label text="BIENVENIDO A SOL ECLIPSADO">
+         <font>
+            <Font name="Tahoma Bold" size="25.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="35.0" />
+         </VBox.margin>
+      </Label>
+      <ImageView fitHeight="300.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+         <VBox.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </VBox.margin>
+      </ImageView>
+      <Label text="¡Escribe la palabra secreta!">
+         <font>
+            <Font name="Tahoma Bold" size="16.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
+         </VBox.margin>
+      </Label>
+      <TextField fx:id="txSecretWord" alignment="CENTER" maxWidth="200.0">
+         <font>
+            <Font name="Tahoma Bold" size="16.0" />
+         </font>
+      </TextField>
+      <Button fx:id="btPlay" maxWidth="70.0" mnemonicParsing="false" onAction="#onActionPlay" prefHeight="30.0" text="Jugar">
+         <font>
+            <Font name="Tahoma Bold" size="13.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="8.0" />
+         </VBox.margin>
+      </Button>
+      <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="btRulesGame" mnemonicParsing="false" onAction="#onActionRulesGame" text="Reglas del juego">
+               <font>
+                  <Font name="Tahoma Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="35.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</VBox>
