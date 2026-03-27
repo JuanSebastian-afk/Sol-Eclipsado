@@ -48,7 +48,7 @@
                   <Font name="Tahoma Bold" size="13.0" />
                </font>
             </Label>
-            <Button alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" text="Reglas del juego">
+            <Button alignment="TOP_LEFT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionRulesGame" text="Reglas del juego">
                <font>
                   <Font name="Tahoma Bold" size="14.0" />
                </font>

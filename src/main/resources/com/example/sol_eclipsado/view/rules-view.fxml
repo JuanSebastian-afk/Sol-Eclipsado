@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="550.0" style="-fx-background-color: with;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label text="Reglas del juego">
@@ -17,7 +16,7 @@
             <Insets bottom="30.0" left="20.0" right="20.0" top="60.0" />
          </VBox.margin>
       </Label>
-      <TextArea prefHeight="208.0" prefWidth="500.0" text="&#10;   1.  Introducir una palabra secreta en español de entre 6 y 12 letras.&#10;&#10;   2.  Adivinar letra a letra cual es la palabra secreta, se comprobara &#10;        si la letra es correcta o no al momento de introducirla.&#10;&#10;   3.  Cuenta con tres opciones de ayuda las cuales le revelaran una &#10;        letra de la palabra secreta que aun no halla allado en una &#10;        posición aleatoria.&#10;&#10;">
+      <TextArea editable="false" prefHeight="208.0" prefWidth="500.0" text="&#10;   1.  Introducir una palabra secreta en español de entre 6 y 12 letras.&#10;&#10;   2.  Adivinar letra a letra cual es la palabra secreta, se comprobara &#10;        si la letra es correcta o no al momento de introducirla.&#10;&#10;   3.  Cuenta con tres opciones de ayuda las cuales le revelaran una &#10;        letra de la palabra secreta que aun no halla allado en una &#10;        posición aleatoria.&#10;&#10;">
          <font>
             <Font name="Tahoma Bold" size="14.0" />
          </font>

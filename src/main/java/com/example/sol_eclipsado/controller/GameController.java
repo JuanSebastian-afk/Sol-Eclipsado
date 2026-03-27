@@ -4,13 +4,18 @@ import com.example.sol_eclipsado.model.SecretWord;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class GameController {
 
@@ -18,14 +23,26 @@ public class GameController {
     private HBox hbLetras;
 
     @FXML
+    Label lbBooleanResponse;
+
+
+    @FXML
     public  void initialize(){  //Generamos las casillas cuando inicializamos el fxml
         generateCasillas();
     }
 
-    @FXML
-    Label lbBooleanResponse;
 
-    public GameController(){}
+    @FXML
+    public void onActionRulesGame() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/sol_eclipsado/view/rules-view.fxml"));
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root);
+        Stage newStage = new Stage();
+        newStage.setScene(scene);
+        newStage.show();
+    }
+
 
     /*
     * Este método se encargara de crear las casillas donde el jugador introducira
