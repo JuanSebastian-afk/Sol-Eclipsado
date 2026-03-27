@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sol_eclipsado.controller.GameController">
    <children>
       <Label text="¡SALVA AL SOL DE SER ECLLIPSADO!">
          <font>
@@ -28,8 +27,12 @@
          <font>
             <Font name="Tahoma Bold" size="16.0" />
          </font>
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
       </Label>
-      <HBox prefHeight="100.0" prefWidth="200.0" />
+      <HBox fx:id="hbLetras" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" />
+      <Label fx:id="lbBooleanResponse" text="Respuesta corrcta o incorrectta" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
             <Button fx:id="btHelp" mnemonicParsing="false" style="-fx-background-color: green;" text="Ayudas (X)">

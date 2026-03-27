@@ -70,7 +70,6 @@ public class WelcomeController {
             return false;
         }
 
-        SecretWord.transformMinus();
         return true;
     }
 

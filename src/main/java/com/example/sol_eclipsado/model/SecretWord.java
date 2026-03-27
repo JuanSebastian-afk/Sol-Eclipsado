@@ -15,6 +15,9 @@ package com.example.sol_eclipsado.model;
 public class SecretWord {
 
     private static String secretWord;
+    private static String secretWordAux;  // Esta variable guardara la palabra secretq tal y comose digito para mostrarla al final del juego.
+    private static char[] secretWordArray;
+    private static char[] lettersFound;
     private static SecretWord instansia;  // A travez de esta instancia pueden acceder a los demas metodos de la clase
 
     /*
@@ -24,8 +27,18 @@ public class SecretWord {
     * */
     private SecretWord(){}
 
-    public void setSecretWord(String secretWord) {SecretWord.secretWord = secretWord;}
+    public void setSecretWord(String secretWord) {
+        SecretWord.secretWord = secretWord;
+        SecretWord.lettersFound = new char[secretWord.length() + 1];
+        SecretWord.secretWordArray = secretWord.toLowerCase().toCharArray();  //Guarda las letras como minusculas para ignorar si el usuario ingresa letras minusculas o mayusculas
+    }
     public String getSecretWord() {return secretWord;}
+    public char[] getSecretWordArray() { return secretWordArray; }
+    public static char[] getLettersFound() {return lettersFound; }
+
+    public void setLettersFound(int index, char letter){
+        lettersFound[index] = letter;
+    }
 
     public static SecretWord getInstance(){
         if(instansia == null){
@@ -67,11 +80,6 @@ public class SecretWord {
     public static boolean spacingWordValidation(){
         return secretWord.contains(" ");
     }
-
-
-    /*Este método convertira las letras de la palabra ingresada a minusculas para luego compararlas
-    * con las letras de intestos del usuario*/
-    public static void transformMinus(){ secretWord = secretWord.toLowerCase();}
 
 
 }
