@@ -118,14 +118,12 @@ public class GameController {
 
                     //newValue = newValue.toLowerCase();  //Para que no importe si el usuario ingreso una mayuscula o miniscula
 
-                    /*
-                    * Limitamos la cantidad de letras que se pueden ingresar en una casilla a 1.
-                    * ESTE MÉTODO ESGTA PENDIENTE SU IMPLEMENTACIÓN.
-                    * */
-                    /*if(casilla.getText().length() > 1){
-                        casilla.setEditable(false);  //Para que no modifique el texto si la cantidad de caracteres ingresados es mayor a 1.
-                    }*/
-                    if(casilla.getText().length() == 1 && checkLetter(finalI - 1, newValue.toLowerCase().charAt(0))){
+                    // Tomamos unicamente la primera letra de la casilla
+                    if(casilla.getText().length() > 1){
+                        casilla.setText(newValue.substring(0, 1));  //Solo tomamos el primer caracter
+                    }
+
+                    if(checkLetter(finalI - 1, newValue.toLowerCase().charAt(0))){
                         casilla.setText(newValue);
                         SecretWord.getInstance().setLettersFound(finalI - 1, newValue.charAt(0));
                         casilla.setEditable(false);
@@ -133,6 +131,7 @@ public class GameController {
                         casilla.setStyle("-fx-border-color: gray; " + "-fx-border-width: 2; " +
                                 "-fx-border-style: solid; " + "-fx-background-color: #B2E8AE");  // Agregar bordes redondeandos a las casillas.
                         lbBooleanResponse.setText("¡Hallaste una letra!");
+                        lbBooleanResponse.setStyle("-fx-text-fill: green;");
 
                         //Comprueba si con esa letra el jugador completo la palabra secreta y muestra la ventan final
                         if(GameLogic.getIntance().win()){
@@ -148,12 +147,21 @@ public class GameController {
                             }
                         }
 
+                        //Pasamos la siguiente casilla si esta ya esta llena
+                        if(!newValue.isEmpty()){
+                            if(finalI < hbLetras.getChildren().size()){
+                                TextField casillaNex = (TextField) hbLetras.getChildren().get(finalI);
+                                casillaNex.requestFocus();
+                            }
+                        }
+
                     }else {
                         int failure = GameLogic.getIntance().getQuantityFailure();
                         GameLogic.getIntance().setQuantityFailure(failure + 1);
 
                         lbQuantityFailure.setText("cantidad de fallos: " + (failure+1));
-                        lbBooleanResponse.setText("¡Fallaste !sigue intentandolo!");
+                        lbBooleanResponse.setText("¡Fallaste! " + newValue + " no es correcto ¡sigue intentandolo!");
+                        lbBooleanResponse.setStyle("-fx-text-fill: red;");
                         casilla.setStyle("-fx-border-color: red; " + "-fx-border-width: 2; " +
                                 "-fx-border-style: solid; " + "-fx-background-color: #FA9B9B");
 
@@ -170,6 +178,8 @@ public class GameController {
                                 throw new RuntimeException(e);
                             }
                         }
+
+                        casilla.clear();
                     }
 
                 }
