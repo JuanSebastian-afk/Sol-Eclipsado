@@ -27,6 +27,7 @@ public class GameLogic {
     public void setQuantityAid(int quantityAid) { this.quantityAid = quantityAid; }
     public void setQuantityFailure(int quantityFailure) { this.quantityFailure = quantityFailure; }
     public void setWin(boolean win){ this.win = win; }
+    public boolean getWin(){return win; }
 
     public boolean losed(){
         return quantityFailure >= 5;  //Devuelve true si aun no llega a los 5 fallos, false si ya llego a los 5 fallos
