@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
@@ -37,6 +39,9 @@ public class GameController {
 
     @FXML
     private Label lbQuantityHelp;
+
+    @FXML
+    ImageView imEclipsePhase;
 
     @FXML
     public  void initialize(){  //Generamos las casillas cuando inicializamos el fxml
@@ -117,8 +122,6 @@ public class GameController {
                 @Override
                 public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
 
-                    //newValue = newValue.toLowerCase();  //Para que no importe si el usuario ingreso una mayuscula o miniscula
-
                     // Tomamos unicamente la primera letra de la casilla
                     if(casilla.getText().length() > 1){
                         casilla.setText(newValue.substring(0, 1));  //Solo tomamos el primer caracter
@@ -181,6 +184,11 @@ public class GameController {
                         }
 
                         casilla.clear();
+
+                        String url = "/com/example/sol_eclipsado/Images/eclipse" +
+                                GameLogic.getIntance().getQuantityFailure() + ".png";
+
+                        imEclipsePhase.setImage(new Image(getClass().getResource(url).toExternalForm()));
                     }
 
                 }
