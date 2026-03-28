@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.text.Normalizer;
 
 public class GameController {
 
@@ -189,9 +190,18 @@ public class GameController {
 
     }
 
-
+    //Este método hace la validación de la letra ingresada antes quitandole los acentos.
     public static boolean checkLetter(int indice, char letraIngresada){
-        return SecretWord.getInstance().getSecretWordArray()[indice] == letraIngresada;
+        return normalizer(SecretWord.getInstance().getSecretWordArray()[indice]) == normalizer(letraIngresada);
+    }
+
+    public static char normalizer(char c){
+
+        String normalizeLetter = String.valueOf(c);  //Convierte el char en String para poder usar replaceAll
+        normalizeLetter = Normalizer.normalize(normalizeLetter, Normalizer.Form.NFD);   // Esta linea utiliza la función "normalize" de la calse Normalizer para separar las letras de sus acentos
+        normalizeLetter = normalizeLetter.replaceAll("\\p{InCOMBINING_DIACRITICAL_MARKS}+", "");  //Utiliza la expreción regular para borrar los acentos.
+
+        return normalizeLetter.charAt(0);
     }
 
 
