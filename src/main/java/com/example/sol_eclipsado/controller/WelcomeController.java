@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -41,10 +42,14 @@ public class WelcomeController {
 
 
     @FXML
-    public void onActionButtonRulesGame(){
-        //Mostrar la ventana de reglas del juego (sobre la ventana de bienvenida)
+    public void onActionRulesGame() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/sol_eclipsado/view/rules-view.fxml"));
+        Parent root = loader.load();
 
-
+        Scene scene = new Scene(root);
+        Stage newStage = new Stage();
+        newStage.setScene(scene);
+        newStage.show();
     }
 
 

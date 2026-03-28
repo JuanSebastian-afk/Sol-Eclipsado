@@ -31,16 +31,17 @@
             <Insets bottom="10.0" />
          </VBox.margin>
       </Label>
-      <HBox fx:id="hbLetras" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" />
+      <Label fx:id="lbQuantityFailure" text="Cantidad del fallos: 0" />
+      <HBox fx:id="hbLetras" alignment="TOP_CENTER" prefHeight="67.0" prefWidth="1000.0" />
       <Label fx:id="lbBooleanResponse" text="Respuesta corrcta o incorrectta" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button fx:id="btHelp" mnemonicParsing="false" style="-fx-background-color: green;" text="Ayudas (X)">
+            <Button fx:id="btHelp" mnemonicParsing="false" onAction="#onActionHelp" style="-fx-background-color: green;" text="Ayuda (3)">
                <font>
                   <Font name="Tahoma Bold" size="14.0" />
                </font>
             </Button>
-            <Label fx:id="lbQuantyHelp" text="Te quedan X ayudas">
+            <Label fx:id="lbQuantityHelp" text="Te quedan 3 ayudas">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>

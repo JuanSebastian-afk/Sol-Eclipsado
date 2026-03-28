@@ -29,7 +29,7 @@ public class SecretWord {
 
     public void setSecretWord(String secretWord) {
         SecretWord.secretWord = secretWord;
-        SecretWord.lettersFound = new char[secretWord.length() + 1];
+        SecretWord.lettersFound = new char[secretWord.length()];
         SecretWord.secretWordArray = secretWord.toLowerCase().toCharArray();  //Guarda las letras como minusculas para ignorar si el usuario ingresa letras minusculas o mayusculas
     }
     public String getSecretWord() {return secretWord;}
