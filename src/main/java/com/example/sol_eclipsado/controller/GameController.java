@@ -3,8 +3,6 @@ package com.example.sol_eclipsado.controller;
 import com.example.sol_eclipsado.StageMain;
 import com.example.sol_eclipsado.model.GameLogic;
 import com.example.sol_eclipsado.model.SecretWord;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -18,11 +16,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.text.Normalizer;
 
+/**
+ * Controller for the main game screen.
+ * Handles user interactions, dynamic generation of input fields,
+ * the hint system (aids), and updates the visual state of the eclipse.
+ * @author Juan Sebastian Valencia
+ * @version 1.1
+ */
 public class GameController {
 
     @FXML
@@ -41,176 +44,175 @@ public class GameController {
     private Label lbQuantityHelp;
 
     @FXML
-    ImageView imEclipsePhase;
+    private ImageView imEclipsePhase;
 
+    /**
+     * Initializes the controller and generates the letter input fields.
+     */
     @FXML
-    public  void initialize(){  //Generamos las casillas cuando inicializamos el fxml
+    public void initialize() {
         generateCasillas();
     }
 
-
+    /**
+     * Displays the game rules in a new window.
+     * @throws IOException If the FXML file for rules is not found.
+     */
     @FXML
     public void onActionRulesGame() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/sol_eclipsado/view/rules-view.fxml"));
         Parent root = loader.load();
-
         Scene scene = new Scene(root);
         Stage newStage = new Stage();
         newStage.setScene(scene);
         newStage.show();
     }
 
-
+    /**
+     * Executes the help logic by revealing a random missing letter.
+     * Consumes one of the three available aids.
+     */
     @FXML
-    public void onActionHelp(){
-        if(GameLogic.getIntance().getQuantityAid() > 0){
+    public void onActionHelp() {
+        GameLogic logic = GameLogic.getInstance();
+        int remainingAids = logic.getQuantityAid();
 
-            int posicionEmpty = GameLogic.getIntance().posicionVaciaLetterFound();
+        if (remainingAids > 0) {
+            int posicionEmpty = logic.getRandomEmptyPosition();
 
-            TextField casilla = (TextField) hbLetras.getChildren().get(posicionEmpty);  //EN ESTA LINEA ESTA EL ERROR
+            // Safety check if no positions are left
+            if (posicionEmpty == -1) return;
 
+            TextField casilla = (TextField) hbLetras.getChildren().get(posicionEmpty);
             char letraRevelada = SecretWord.getInstance().getSecretWordArray()[posicionEmpty];
 
-            casilla.setText(String.valueOf(letraRevelada).toLowerCase());  //Transformamos el char en un string.
+            // Reveal letter and disable input for that cell
+            casilla.setText(String.valueOf(letraRevelada));
             casilla.setEditable(false);
-            casilla.setStyle("-fx-border-color: gray; " + "-fx-border-width: 2; " +
-                    "-fx-border-style: solid; " + "-fx-background-color: #B2E8AE");
+            casilla.setStyle("-fx-border-color: gray; -fx-background-color: #B2E8AE; -fx-border-width: 2;");
 
-            int quantityAid = GameLogic.getIntance().getQuantityAid();
-            btHelp.setText("Ayudas (" + quantityAid + ")");
-            lbQuantityHelp.setText("Te quedan " + quantityAid + " ayudas");
+            // Update internal state and model
+            SecretWord.getInstance().setLettersFound(posicionEmpty, letraRevelada);
+            logic.setQuantityAid(remainingAids - 1);
 
-            GameLogic.getIntance().setQuantityAid(quantityAid - 1);
+            // Update UI labels
+            updateHelpUI(logic.getQuantityAid());
 
-        }else {
-            btHelp.setDisable(false);
-            int quantityAid = GameLogic.getIntance().getQuantityAid();
-            btHelp.setText("Ayuda (" + quantityAid + ")");
-            lbQuantityHelp.setText("Te quedan " + quantityAid + " ayudas");
-            btHelp.setStyle("-fx-background-color: grey; " + "-fx-border-color: #1E1E33");
+            // Check if this help completed the word
+            if (logic.checkWinCondition()) {
+                handleEndGame(true);
+            }
+        } else {
+            btHelp.setDisable(true);
+            btHelp.setStyle("-fx-background-color: grey;");
         }
     }
 
-
-    /*
-    * Este método se encargara de crear las casillas donde el jugador introducira
-    * las letras de la palabra secreta
-    */
-    public void generateCasillas(){
-
+    /**
+     * Dynamically generates TextFields for each letter of the secret word.
+     * Each field includes a listener to validate user input in real-time.
+     */
+    public void generateCasillas() {
         int quantyCasillas = SecretWord.getInstance().getSecretWord().length();
         hbLetras.setSpacing(10);
 
-        for(int i = 1; i <= quantyCasillas; i++){
-
-            /*
-            * Este código genera las casillas correspondientes a cada letra de la palabra secreta
-            * */
-            TextField casilla = new TextField();  // Creamos una casilla por cada letra que tenga la palabra.
+        for (int i = 0; i < quantyCasillas; i++) {
+            TextField casilla = new TextField();
             casilla.setPrefWidth(40);
             casilla.setPrefHeight(40);
             casilla.setAlignment(Pos.CENTER);
 
-            /*
-            * Este código agrega un Listener a cada casilla para que reciba los cambios en el
-            * texto ingresados en la casilla correspondiente, la idea es que a travez de este
-            * Listener se verifique si la letra ingresada coresponde a la letra en palabra
-            * secreta o no
-            * */
-            int finalI = i; //Para poder acceder al indice desde el método del Listener
-            casilla.textProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+            final int index = i;
+            casilla.textProperty().addListener((obs, oldValue, newValue) -> {
+                if (newValue.isEmpty()) return;
 
-                    // Tomamos unicamente la primera letra de la casilla
-                    if(casilla.getText().length() > 1){
-                        casilla.setText(newValue.substring(0, 1));  //Solo tomamos el primer caracter
-                    }
+                // Handle only the first character entered
+                String input = newValue.substring(newValue.length() - 1).toLowerCase();
+                char typedChar = input.charAt(0);
 
-                    if(checkLetter(finalI - 1, newValue.toLowerCase().charAt(0))){
-                        casilla.setText(newValue);
-                        SecretWord.getInstance().setLettersFound(finalI - 1, newValue.charAt(0));
-                        casilla.setEditable(false);
-                        //Damos estilo al borde para indicar que se hallo una palabrar correcta
-                        casilla.setStyle("-fx-border-color: gray; " + "-fx-border-width: 2; " +
-                                "-fx-border-style: solid; " + "-fx-background-color: #B2E8AE");  // Agregar bordes redondeandos a las casillas.
-                        lbBooleanResponse.setText("¡Hallaste una letra!");
-                        lbBooleanResponse.setStyle("-fx-text-fill: green;");
-
-                        //Comprueba si con esa letra el jugador completo la palabra secreta y muestra la ventan final
-                        if(GameLogic.getIntance().win()){
-                            GameLogic.getIntance().setWin(true);
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/sol_eclipsado/view/final-view.fxml"));
-                            try {
-                                Parent root = loader.load();
-                                Stage stage = StageMain.getStage();
-                                stage.setScene(new Scene(root));
-                                stage.show();
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-
-                        //Pasamos la siguiente casilla si esta ya esta llena
-                        if(!newValue.isEmpty()){
-                            if(finalI < hbLetras.getChildren().size()){
-                                TextField casillaNex = (TextField) hbLetras.getChildren().get(finalI);
-                                casillaNex.requestFocus();
-                            }
-                        }
-
-                    }else {
-                        int failure = GameLogic.getIntance().getQuantityFailure();
-                        GameLogic.getIntance().setQuantityFailure(failure + 1);
-
-                        lbQuantityFailure.setText("cantidad de fallos: " + (failure+1));
-                        lbBooleanResponse.setText("¡Fallaste! " + newValue + " no es correcto ¡sigue intentandolo!");
-                        lbBooleanResponse.setStyle("-fx-text-fill: red;");
-                        casilla.setStyle("-fx-border-color: red; " + "-fx-border-width: 2; " +
-                                "-fx-border-style: solid; " + "-fx-background-color: #FA9B9B");
-
-
-                        //Comprueba si con ese fallo el jugaor ya perdio o aun le quedan mpas intentos.
-                        if(GameLogic.getIntance().losed()){  // carga la ventana final en caso de perder.
-                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/sol_eclipsado/view/final-view.fxml"));
-                            try {
-                                Parent root = loader.load();
-                            Stage stage = StageMain.getStage();
-                            stage.setScene(new Scene(root));
-                            stage.show();
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-
-                        casilla.clear();
-
-                        String url = "/com/example/sol_eclipsado/Images/eclipse" +
-                                GameLogic.getIntance().getQuantityFailure() + ".png";
-
-                        imEclipsePhase.setImage(new Image(getClass().getResource(url).toExternalForm()));
-                    }
-
+                if (checkLetter(index, typedChar)) {
+                    processCorrectGuess(casilla, index, typedChar);
+                } else {
+                    processIncorrectGuess(casilla, typedChar);
                 }
             });
             hbLetras.getChildren().add(casilla);
         }
-
     }
 
-    //Este método hace la validación de la letra ingresada antes quitandole los acentos.
-    public static boolean checkLetter(int indice, char letraIngresada){
-        return normalizer(SecretWord.getInstance().getSecretWordArray()[indice]) == normalizer(letraIngresada);
+    private void processCorrectGuess(TextField casilla, int index, char letter) {
+        casilla.setText(String.valueOf(letter));
+        casilla.setEditable(false);
+        casilla.setStyle("-fx-border-color: green; -fx-background-color: #B2E8AE; -fx-border-width: 2;");
+
+        SecretWord.getInstance().setLettersFound(index, letter);
+        lbBooleanResponse.setText("¡Correcto!");
+        lbBooleanResponse.setStyle("-fx-text-fill: green;");
+
+        if (GameLogic.getInstance().checkWinCondition()) {
+            handleEndGame(true);
+        } else {
+            focusNextField(index);
+        }
     }
 
-    public static char normalizer(char c){
+    private void processIncorrectGuess(TextField casilla, char letter) {
+        GameLogic logic = GameLogic.getInstance();
+        logic.setQuantityFailure(logic.getQuantityFailure() + 1);
 
-        String normalizeLetter = String.valueOf(c);  //Convierte el char en String para poder usar replaceAll
-        normalizeLetter = Normalizer.normalize(normalizeLetter, Normalizer.Form.NFD);   // Esta linea utiliza la función "normalize" de la calse Normalizer para separar las letras de sus acentos
-        normalizeLetter = normalizeLetter.replaceAll("\\p{InCOMBINING_DIACRITICAL_MARKS}+", "");  //Utiliza la expreción regular para borrar los acentos.
+        casilla.clear();
+        lbQuantityFailure.setText("Fallos: " + logic.getQuantityFailure());
+        lbBooleanResponse.setText("Equivocado! la letra '" + letter + "' no es correcta.");
+        lbBooleanResponse.setStyle("-fx-text-fill: red;");
 
-        return normalizeLetter.charAt(0);
+        updateEclipseImage(logic.getQuantityFailure());
+
+        if (logic.hasLost()) {
+            handleEndGame(false);
+        }
     }
 
+    private void updateHelpUI(int count) {
+        btHelp.setText("Ayuda (" + count + ")");
+        lbQuantityHelp.setText("Ayudas restantes: " + count);
+    }
 
+    private void updateEclipseImage(int failureCount) {
+        if (failureCount <= 5) {
+            String url = "/com/example/sol_eclipsado/Images/eclipse" + failureCount + ".png";
+            imEclipsePhase.setImage(new Image(getClass().getResource(url).toExternalForm()));
+        }
+    }
+
+    private void focusNextField(int currentIndex) {
+        if (currentIndex + 1 < hbLetras.getChildren().size()) {
+            hbLetras.getChildren().get(currentIndex + 1).requestFocus();
+        }
+    }
+
+    private void handleEndGame(boolean didWin) {
+        GameLogic.getInstance().setWin(didWin);
+        try {
+            Parent root = new FXMLLoader(getClass().getResource("/com/example/sol_eclipsado/view/final-view.fxml")).load();
+            StageMain.getStage().setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Validates a letter by comparing normalized versions (ignoring accents).
+     * @param index The position in the secret word.
+     * @param input The character entered by the user.
+     * @return true if the letters match after normalization.
+     */
+    public static boolean checkLetter(int index, char input) {
+        char secret = SecretWord.getInstance().getSecretWordArray()[index];
+        return normalize(secret) == normalize(input);
+    }
+
+    private static char normalize(char c) {
+        String str = Normalizer.normalize(String.valueOf(c), Normalizer.Form.NFD);
+        return str.replaceAll("[^\\p{ASCII}]", "").toLowerCase().charAt(0);
+    }
 }

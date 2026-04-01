@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sol_eclipsado.controller.FinalController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" style="-fx-background-color: withe;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sol_eclipsado.controller.FinalController">
    <children>
       <Label fx:id="lbGameResult" text="RESULTADO DE LA PARTIDA">
          <font>
@@ -19,7 +19,7 @@
             <Insets bottom="10.0" top="35.0" />
          </VBox.margin>
       </Label>
-      <ImageView fitHeight="300.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imWin" fitHeight="300.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
          <VBox.margin>
             <Insets bottom="30.0" />
          </VBox.margin>

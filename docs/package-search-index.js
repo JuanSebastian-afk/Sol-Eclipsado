@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"com.example.sol_eclipsado","l":"com.example.sol_eclipsado"},{"m":"com.example.sol_eclipsado","l":"com.example.sol_eclipsado.controller"},{"m":"com.example.sol_eclipsado","l":"com.example.sol_eclipsado.model"}];updateSearchResults();
